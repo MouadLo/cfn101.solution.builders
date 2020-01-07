@@ -5,6 +5,7 @@
 # request a page called ExamplePage.html and it results in an HTTP 404 error,the request
 # is routed to a page called report-404/ExamplePage.html on the specified instance.
 # For all other HTTP error codes, error.html is returned.
+
 # This example also specifies a metrics configuration called EntireBucket that enables
 # CloudWatch request metrics at the bucket level.
 
@@ -12,7 +13,7 @@ Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: cloudformation-public-bucket
+      AccessControl: PublicRead
       VersioningConfiguration:
         Status: Enabled
       Tags: 
