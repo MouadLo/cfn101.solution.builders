@@ -1,6 +1,22 @@
+# Configure a Static Website with a Routing Rule
+# In this example, AWS::S3::Bucket's Fn::GetAtt values are used to provide outputs.
+# If an HTTP 404 error occurs, the routing rule redirects requests to an EC2 instance
+# and inserts the object key prefix report-404/ in the redirect. For example, if you
+# request a page called ExamplePage.html and it results in an HTTP 404 error,the request
+# is routed to a page called report-404/ExamplePage.html on the specified instance.
+# For all other HTTP error codes, error.html is returned.
+# This example also specifies a metrics configuration called EntireBucket that enables
+# CloudWatch request metrics at the bucket level.
+
 Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
     Properties:
+      BucketName: cloudformation-public-bucket
       VersioningConfiguration:
         Status: Enabled
+      Tags: 
+        -
+          Key: "Name"
+          Value: "automated S3 by CloudFormation template"
+  
