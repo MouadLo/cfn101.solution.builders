@@ -41,4 +41,4 @@ Resources:
         - Key: Name
           Value: !Join [ ' ', [ !Ref InstanceType, Web Server ] ]
         - Key: InstanceType
-          Value: !Sub ${InstanceType}
+          Value: !Sub ${nstanceType}

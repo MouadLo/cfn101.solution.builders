@@ -8,7 +8,7 @@ Metadata:
       - Label:
           default: 'Amazon EC2 Configuration'
         Parameters:
-          - AmiID
+          - InstanceType
 
     ParameterLabels:
       AmiID:
@@ -20,23 +20,23 @@ Parameters:
     Type: String
     Default: Test
     AllowedValues:
-      - Dev
       - Test
       - Prod
-    ConstraintDescription: 'Specify either Dev, Test or Prod.'
+      - Dev
+    ConstraintDescription: 'Specify either Test or Prod.'  
 
   AmiID:
     Type: AWS::EC2::Image::Id
     Description: 'The ID of the AMI.'
 
 Mappings:
-  EnvironmentToInstanceType:
-    Dev:
-      InstanceType: t3.nano
-    Test:
-      InstanceType: t3.micro
+  EnvironmentToInstanceType: # Map Name
+    Test: # Top level key
+      InstanceType: t2.micro # Second level key
     Prod:
       InstanceType: t3.small
+    Dev:
+      InstanceType: t3.nano
 
 Resources:
   WebServerInstance:
@@ -47,5 +47,17 @@ Resources:
       Tags:
         - Key: Name
           Value: !Join [ '-', [ !Ref EnvironmentType, webserver ] ]
+          
+  WebServerEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      InstanceId: !Ref WebServerInstance
 
-  # Add your code here!
+Outputs:  
+  EC2PublicDNS:
+    Description: 'Public DNS of EC2 instance'
+    Value: !GetAtt WebServerInstance.PublicDnsName
+  WebServerElasticIP:
+    Description: 'Elastic IP assigned to EC2'
+    Value: !Ref WebServerEIP
