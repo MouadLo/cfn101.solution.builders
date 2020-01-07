@@ -15,10 +15,6 @@ Metadata:
         default: 'Amazon Machine Image ID'
 
 Parameters:
-  SubnetId:
-    Type: AWS::EC2::Subnet::Id
-    Description: 'The Subnet ID'
-
   EnvironmentType:
     Description: 'Specify the Environment type of the stack.'
     Type: String
@@ -34,16 +30,26 @@ Parameters:
     Description: 'The ID of the AMI.'
     Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
 
-  # Add VpcId parameter here
+  # VpcId parameter here
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: 'The VPC ID'
 
-  # Add WebServerInstanceProfile parameter here
+  SubnetId:
+    Type: AWS::EC2::Subnet::Id
+    Description: 'The Subnet ID'
+    
+  # WebServerInstanceProfile parameter here   
+  WebServerInstanceProfile:
+    Type: String
+    Description: 'Instance profile resource ID'
 
 Mappings:
   EnvironmentToInstanceType:
     Dev:
-      InstanceType: t3.nano
+      InstanceType: t2.micro
     Test:
-      InstanceType: t3.micro
+      InstanceType: t2.micro
     Prod:
       InstanceType: t3.small
 
@@ -155,7 +161,7 @@ Resources:
           FromPort: 80
           ToPort: 80
           CidrIp: 0.0.0.0/0
-      # Add 'VpcId' property here
+      VpcId: !Ref VpcId
 
   WebServerEIP:
     Type: AWS::EC2::EIP
