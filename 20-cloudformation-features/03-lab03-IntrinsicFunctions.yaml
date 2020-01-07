@@ -17,19 +17,28 @@ Metadata:
 Parameters:
   InstanceType:
     Type: String
-    Default: t3.micro
+    Default: t2.micro
     AllowedValues:
       - t3.micro
       - t3.small
+      - t2.micro
     Description: 'Enter t3.micro or t3.small. Default is t3.micro.'
 
   # Add AmiId parameter here
+  AmiID:
+    Type: AWS::EC2::Image::Id
+    Description: 'The ID of the AMI.'
 
 Resources:
   WebServerInstance:
     Type: AWS::EC2::Instance
     Properties:
       # Use !Ref function in ImageId property
-      ImageId: ami-00a1270ce1e007c27
+      ImageId: !Ref AmiID
       InstanceType: !Ref InstanceType
       # Add Tags property here
+      Tags:
+        - Key: Name
+          Value: !Join [ ' ', [ !Ref InstanceType, Web Server ] ]
+        - Key: InstanceType
+          Value: !Sub ${InstanceType}
